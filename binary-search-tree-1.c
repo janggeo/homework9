@@ -136,7 +136,7 @@ int insert(Node* head, int key)
 		parentNode = ptr;
 
 		/*입력받은 key 값이 ptr이 가리키는 노드의 key값 보다 클경우
-			ptr을 오른쪽 노드로 이동*/
+			ptr을 오른쪽 노드로 이동, 다른경우 왼쪽으로 이동*/
 		if(ptr->key < key)
 			ptr = ptr->right;
 		else
@@ -178,3 +178,61 @@ void postorderTraversal(Node* ptr)
 	}
 }
 
+int deleteLeafNode(Node* head, int key)
+{
+	if (head == NULL){
+		printf("\n Nothing to delete!!\n");
+		return -1;
+	}
+
+	if (head->left == NULL){
+		printf("\n Nothing to delete!!\n");
+		return -1;
+	}
+
+	/*head-> left is the root */
+	Node* ptr = head->left;
+	Node* parentNode=head;
+	while(ptr != NULL){
+
+		if(ptr->key == key){
+			if(ptr->left==NULL && ptr->right ==NULL){	//ptr이 단말노드인경우
+				/*root노드만 존재할 경우*/
+				if(parentNode==head)
+					head->left=NULL;	//가리키는 값을 NULL로 변경
+				/*왼쪽 노드와 오른쪽 노드를 제거할경우*/
+				if(parentNode->left==ptr)
+					parentNode->left=NULL;
+				else
+					parentNode->right=NULL;
+				free(ptr);
+			}
+			else{
+				printf("the node [%d] is not a leaf \n",ptr->key);
+			}
+			return 1;
+		}
+		/*ptr의 부모를 가리킬 포인터*/
+		parentNode= ptr;
+
+		/*입력받은 key 값이 ptr이 가리키는 노드의 key값 보다 클경우
+			ptr을 오른쪽 노드로 이동, 다른경우 왼쪽으로 이동*/
+		if(ptr->key <key)
+			ptr=ptr->right;
+		else
+			ptr= ptr->left;
+	}
+}
+
+Node* searchRecursive(Node* ptr, int key)
+{
+	if(ptr == NULL)	//노드가 비었을경우
+		return NULL;
+	
+	if(ptr->key < key)
+		ptr = searchRecursive(ptr->right, key);	//오른쪽 자식을 재귀호출
+	else if(ptr->key > key)
+		ptr=searchRecursive(ptr->left, key);	//왼쪽 자식을 재귀호출
+	/*if ptr->key ==key*/
+	return ptr;
+}
