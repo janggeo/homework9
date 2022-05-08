@@ -6,6 +6,8 @@
 	2)처음 root노드를 추가할때 initializeBST함수를 먼저 호출 하지 않고 바로 insert할 수 있도록 main 함수에서 
 		head포인터 동적할당
 	
+	3)deleteLeafNode(Node* head, int key) 함수에서 입력받은 key값을 가지는 node를 지울때
+		해당하는 key값을 가지는 노드가 없을 경우 오류 메시지 출력하도록 수정
 */
 
 #include <stdio.h>
@@ -234,6 +236,8 @@ int deleteLeafNode(Node* head, int key)
 		else
 			ptr= ptr->left;
 	}
+	printf("[%d] is not in tree\n",key);
+	return -1;
 }
 
 Node* searchRecursive(Node* ptr, int key)
