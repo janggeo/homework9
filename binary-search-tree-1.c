@@ -1,5 +1,11 @@
 /*[2021076029] [장정환]
-
+	수정사항
+	1)freeBST(Node* head)에서 if(head->left == head)를 if(head->right == head)로 변경
+		initializeBST함수에서 root노드를 가리키는 head를 초기화 할때 오른쪽 자식이 head노드를 가리키도록 초기화 하였다. 
+	
+	2)처음 root노드를 추가할때 initializeBST함수를 먼저 호출 하지 않고 바로 insert할 수 있도록 main 함수에서 
+		head포인터 동적할당
+	
 */
 
 #include <stdio.h>
@@ -27,8 +33,13 @@ int main(void)
 {
 	char command;
 	int key;
-	Node* head =NULL;
-	Node* ptr = NULL;
+
+	Node* head = (Node*)malloc(sizeof(Node));
+	head->key=-9999;
+	head->left=NULL;
+	head->right=head;
+
+	Node* ptr = NULL;	/*temp*/
 
 	do{
 		printf("\n\n");
@@ -144,9 +155,9 @@ int insert(Node* head, int key)
 	}
 	/*부모노드에 연결*/
 	if(parentNode->key >key)
-		ptr->left = newNode;
+		parentNode->left = newNode;
 	else
-		ptr->right = newNode;
+		parentNode->right = newNode;
 	return 1;
 
 }
@@ -156,7 +167,7 @@ void inorderTraversal(Node* ptr)
 	if(ptr){
 		inorderTraversal(ptr->left);
 		printf(" [%d] ", ptr->key);
-		inotrderTraversal(ptr->right);
+		inorderTraversal(ptr->right);
 	}
 }
 
@@ -235,4 +246,48 @@ Node* searchRecursive(Node* ptr, int key)
 		ptr=searchRecursive(ptr->left, key);	//왼쪽 자식을 재귀호출
 	/*if ptr->key ==key*/
 	return ptr;
+}
+
+Node* searchIterative(Node* head, int key)
+{
+	Node* ptr = head->left;	//root 노드
+
+	while(ptr != NULL)
+	{
+		if(ptr->key == key)
+			return ptr;	//key 값이 존재할경우 해당되는 주소를 반환
+		/*입력받은 key값이 더 클 경우 ptr을 오른쪽 자식으로 이동
+			작은 경우 왼쪽으로 이동*/
+		if(ptr->key < key)
+			ptr=ptr->right;
+		else	
+			ptr = ptr->left;
+	}
+
+	return NULL;	//해당되는 key값이 없는경우 NULL 반환
+}
+
+void freeNode(Node* ptr)
+{
+	if(ptr){	//recursive 방식으로 노드 해제
+		freeNode(ptr->left);
+		freeNode(ptr->right);
+		free(ptr);	//root 노드 해제
+	}
+}
+
+int freeBST(Node* head)
+{
+	if(head->right == head)	//root 노드를 가리키는 head노드만 존재할경우
+	{
+		free(head);
+		return 1;
+	}
+
+	Node* p = head->left;	//root
+
+	freeNode(p);	//tree 동적할당 해제
+
+	free(head);	//root 노드를 가리키는 노드 동적할당 해제
+	return 1;
 }
