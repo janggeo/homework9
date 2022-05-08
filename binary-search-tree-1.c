@@ -150,3 +150,31 @@ int insert(Node* head, int key)
 	return 1;
 
 }
+
+void inorderTraversal(Node* ptr)
+{	/*재귀호출로 중위 순회*/
+	if(ptr){
+		inorderTraversal(ptr->left);
+		printf(" [%d] ", ptr->key);
+		inotrderTraversal(ptr->right);
+	}
+}
+
+void preorderTraversal(Node* ptr)
+{	/*재귀호출로 전위 순회*/
+	if(ptr){
+		printf(" [%d] ", ptr->key);
+		preorderTraversal(ptr->left);
+		preorderTraversal(ptr->right);
+	}
+}
+
+void postorderTraversal(Node* ptr)
+{	/*재귀호출로 후위 순회*/
+	if(ptr){
+		postorderTraversal(ptr->left);
+		postorderTraversal(ptr->right);
+		printf(" [%d] ",ptr ->key);
+	}
+}
+
