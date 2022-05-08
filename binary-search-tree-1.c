@@ -31,6 +31,7 @@ int freeBST(Node* head);	//free all memories allocated to the tree
 
 int main(void)
 {
+	printf("-----[2021076029] [장정환]-----");
 	char command;
 	int key;
 
